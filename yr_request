@@ -1,0 +1,21 @@
+####This site was created to notify about the usage of Yr's free API forecast service
+#The forecast is meant to be called approximately once a day, to predict the energy usage of house. During developing the number will be a bit higher.
+#For any problems please contact "s183565@student.dtu.dk"
+
+
+
+urlVejrF = "https://api.met.no/weatherapi/locationforecast/2.0/compact.json?altitude=2&lat=55.7&lon=12.1"
+sitename="github.com/s183565/YrForecastAPI"
+user_agent = {
+    'User-Agent': 'github.com/s183565/YrForecastAPI',
+}
+udeTem = requests.get(urlVejrF, headers=user_agent)
+
+outF=[]
+outT=[]
+
+for i in range(timer):
+    outT.append(udeTem.json()['properties']['timeseries'][i]['time'])
+    outF.append(udeTem.json()['properties']['timeseries'][i]['data']['instant']['details']['air_temperature'])
+t_out=pd.DataFrame({"time": outT,"Forecast":outF})
+t_out=t_out.set_index(pd.to_datetime(t_out['time']))['Forecast']
